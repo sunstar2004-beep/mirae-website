@@ -203,8 +203,9 @@
   .inquiry-meta{margin-top:28px; display:flex; flex-direction:column; gap:10px; font-size:13.5px; color:#C7C9CD;}
   .inquiry-contact-cards{margin-top:22px; display:flex; flex-direction:column; gap:10px;}
   .inquiry-contact-card{background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.14); border-radius:10px; padding:12px 14px;}
-  .inquiry-contact-card b{display:block; color:#fff; font-size:13px; font-weight:700; margin-bottom:6px;}
-  .inquiry-contact-card span{display:block; font-size:12.5px; color:#D7D9DD; line-height:1.7;}
+  .inquiry-contact-card b{display:block; color:#fff; font-size:13px; font-weight:700; margin-bottom:8px;}
+  .ic-row{display:flex; flex-wrap:wrap; gap:16px;}
+  .ic-item{font-size:12.5px; color:#D7D9DD; white-space:nowrap;}
   .form-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
   .form-grid .full{grid-column:1/-1;}
   label{font-size:12.5px; color:#B9BBC0; display:block; margin-bottom:6px;}
@@ -273,7 +274,7 @@
   .detail-body{max-width:1120px; margin:0 auto; padding:70px 24px;}
   .gallery-section{background:var(--surface-soft); border-top:1px solid var(--hairline);}
   .g-board{width:100%;}
-  .g-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:14px;}
+  .g-grid{display:grid; grid-template-columns:repeat(5, 1fr); gap:10px;}
   .g-cell{position:relative; border-radius:12px; overflow:hidden; aspect-ratio:4/3; cursor:pointer; background:#111; box-shadow:0 2px 10px rgba(0,0,0,0.08);}
   .g-cell img{width:100%; height:100%; object-fit:cover; transition:transform .35s ease, filter .35s ease; display:block;}
   .g-cell:hover img{transform:scale(1.06);}
@@ -395,7 +396,12 @@
   .admin-btn.danger{color:#C0392B; border-color:#f0c4bd;}
   .admin-actions{position:sticky; bottom:0; background:rgba(255,255,255,0.96); backdrop-filter:blur(6px); border-top:1px solid var(--hairline); padding:18px 24px; display:flex; gap:14px; justify-content:center; margin:0 -24px;}
   .admin-actions .admin-btn{font-size:17px; padding:16px 34px;}
-  #adminSavedMsg{display:none; text-align:center; color:var(--teal); font-weight:700; margin-bottom:16px; font-size:16px;}
+  #adminSavedMsg{
+    display:none; position:fixed; top:28px; left:50%; transform:translateX(-50%);
+    background:var(--ink); color:#fff; font-weight:700; font-size:15px;
+    padding:16px 28px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.25);
+    z-index:500; text-align:center;
+  }
   .admin-file-input{font-size:14px;}
 </style>
 </head>
@@ -680,13 +686,17 @@
           <div class="inquiry-contact-cards">
             <div class="inquiry-contact-card">
               <b>김근안 대표</b>
-              <span>📞 <span data-edit="inquiry_phone">010-6378-5822</span></span>
-              <span>✉️ <span data-edit="inquiry_email">72dong@naver.com</span></span>
+              <div class="ic-row">
+                <span class="ic-item">📞 <span data-edit="inquiry_phone">010-6378-5822</span></span>
+                <span class="ic-item">✉️ <span data-edit="inquiry_email">72dong@naver.com</span></span>
+              </div>
             </div>
             <div class="inquiry-contact-card">
               <b>허대균 팀장</b>
-              <span>📞 <span data-edit="inquiry_phone2">010-3036-0982</span></span>
-              <span>✉️ <span data-edit="inquiry_email2">sunstar2004@gmail.com</span></span>
+              <div class="ic-row">
+                <span class="ic-item">📞 <span data-edit="inquiry_phone2">010-3036-0982</span></span>
+                <span class="ic-item">✉️ <span data-edit="inquiry_email2">sunstar2004@gmail.com</span></span>
+              </div>
             </div>
           </div>
         </div>
