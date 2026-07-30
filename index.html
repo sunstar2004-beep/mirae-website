@@ -1409,14 +1409,41 @@
     });
     container.innerHTML = html;
   }
+  function compressImageFile(file, maxDim, quality){
+    return new Promise(function(resolve){
+      const reader = new FileReader();
+      reader.onload = function(e){
+        const img = new Image();
+        img.onload = function(){
+          let w = img.width, h = img.height;
+          if(w > maxDim || h > maxDim){
+            if(w > h){ h = Math.round(h * maxDim / w); w = maxDim; }
+            else { w = Math.round(w * maxDim / h); h = maxDim; }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          try {
+            resolve(canvas.toDataURL('image/jpeg', quality));
+          } catch(err){
+            resolve(e.target.result);
+          }
+        };
+        img.onerror = function(){ resolve(e.target.result); };
+        img.src = e.target.result;
+      };
+      reader.onerror = function(){ resolve(null); };
+      reader.readAsDataURL(file);
+    });
+  }
   function adminReplaceImage(key, files){
     if(!files || !files.length) return;
-    const reader = new FileReader();
-    reader.onload = function(e){
-      adminImageState[key] = e.target.result;
+    compressImageFile(files[0], 700, 0.82).then(function(dataUrl){
+      if(!dataUrl) return;
+      adminImageState[key] = dataUrl;
       buildAdminImagesSection();
-    };
-    reader.readAsDataURL(files[0]);
+    });
   }
   function adminDeletePhoto(axis, i){
     adminGalleryState[axis].splice(i, 1);
@@ -1427,13 +1454,11 @@
     let remaining = list.length;
     if(!remaining) return;
     list.forEach(function(file){
-      const reader = new FileReader();
-      reader.onload = function(e){
-        adminGalleryState[axis].push(e.target.result);
+      compressImageFile(file, 1280, 0.72).then(function(dataUrl){
+        if(dataUrl) adminGalleryState[axis].push(dataUrl);
         remaining--;
         if(remaining === 0) buildAdminImagesSection();
-      };
-      reader.readAsDataURL(file);
+      });
     });
   }
 
@@ -1696,16 +1721,36 @@
   }
 
   function adminSave(){
-    localStorage.setItem('mireGalleries', JSON.stringify(adminGalleryState));
-    localStorage.setItem('mireImages', JSON.stringify(adminImageState));
-    localStorage.setItem('mireTexts', JSON.stringify(adminTextState));
     const partnerLines = document.getElementById('adminPartnersList').value
       .split('\n').map(function(s){ return s.trim(); }).filter(function(s){ return s.length > 0; });
     adminPartnersState = partnerLines;
-    localStorage.setItem('mirePartners', JSON.stringify(adminPartnersState));
-    localStorage.setItem('mireDocs', JSON.stringify(adminDocsState));
-    localStorage.setItem('mireTestimonials', JSON.stringify(adminTestimonialsState));
-    localStorage.setItem('mireFaqs', JSON.stringify(adminFaqState));
+
+    const LABELS = {
+      mireGalleries: '현장 사진',
+      mireImages: '로고·프로필 사진',
+      mireTexts: '텍스트 문구',
+      mirePartners: '기관 목록',
+      mireDocs: '커리큘럼 파일',
+      mireTestimonials: '후기',
+      mireFaqs: 'FAQ'
+    };
+    const saves = [
+      ['mireGalleries', adminGalleryState],
+      ['mireImages', adminImageState],
+      ['mireTexts', adminTextState],
+      ['mirePartners', adminPartnersState],
+      ['mireDocs', adminDocsState],
+      ['mireTestimonials', adminTestimonialsState],
+      ['mireFaqs', adminFaqState]
+    ];
+    const failedKeys = [];
+    saves.forEach(function(pair){
+      try {
+        localStorage.setItem(pair[0], JSON.stringify(pair[1]));
+      } catch(e) {
+        failedKeys.push(LABELS[pair[0]] || pair[0]);
+      }
+    });
 
     renderAllGalleries();
     applyImageOverrides();
@@ -1714,6 +1759,11 @@
     renderDocs();
     renderTestimonials();
     renderFAQ();
+
+    if(failedKeys.length){
+      alert('다음 항목은 용량 문제로 저장하지 못했습니다: ' + failedKeys.join(', ') + '\n\n(사진이나 파일 용량이 너무 커서 브라우저 저장 공간이 부족한 것 같아요. 사진 개수를 줄이거나 더 작은 파일로 다시 시도해주세요.)\n\n나머지 항목은 정상적으로 저장되었습니다.');
+      return;
+    }
 
     const msg = document.getElementById('adminSavedMsg');
     msg.style.display = 'block';
