@@ -195,14 +195,16 @@
   /* ---------- INQUIRY FORM ---------- */
   #inquiry{scroll-margin-top:var(--header-h, 60px);}
   .inquiry-block{background:var(--ink); color:#fff; border-radius:24px; padding:64px; max-width:1200px; margin:0 auto;}
-  .inquiry-grid{display:grid; grid-template-columns:0.8fr 1.2fr; gap:56px;}
-  .inquiry-grid h2{font-size:clamp(32px,4.4vw,48px); font-weight:800; letter-spacing:-0.02em; color:#fff;}
-  .inquiry-grid p{margin-top:14px; color:#C7C9CD; font-size:14.5px;}
+  .inquiry-grid{display:grid; grid-template-columns:0.58fr 1fr; gap:32px; align-items:start;}
+  .inquiry-grid h2{font-size:clamp(26px,3.4vw,38px); font-weight:800; letter-spacing:-0.02em; color:#fff;}
+  .inquiry-grid p{margin-top:12px; color:#C7C9CD; font-size:13.5px;}
+  .inquiry-left{background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.10); border-radius:16px; padding:26px 24px;}
+  .inquiry-right{background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.14); border-radius:16px; padding:30px;}
   .inquiry-meta{margin-top:28px; display:flex; flex-direction:column; gap:10px; font-size:13.5px; color:#C7C9CD;}
-  .inquiry-contact-cards{margin-top:28px; display:flex; flex-wrap:wrap; gap:14px;}
-  .inquiry-contact-card{background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.14); border-radius:12px; padding:18px 20px; min-width:220px; flex:1 1 220px;}
-  .inquiry-contact-card b{display:block; color:#fff; font-size:15px; font-weight:700; margin-bottom:10px;}
-  .inquiry-contact-card span{display:block; font-size:14px; color:#D7D9DD; line-height:1.9;}
+  .inquiry-contact-cards{margin-top:22px; display:flex; flex-direction:column; gap:10px;}
+  .inquiry-contact-card{background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.14); border-radius:10px; padding:12px 14px;}
+  .inquiry-contact-card b{display:block; color:#fff; font-size:13px; font-weight:700; margin-bottom:6px;}
+  .inquiry-contact-card span{display:block; font-size:12.5px; color:#D7D9DD; line-height:1.7;}
   .form-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
   .form-grid .full{grid-column:1/-1;}
   label{font-size:12.5px; color:#B9BBC0; display:block; margin-bottom:6px;}
@@ -218,7 +220,7 @@
   }
   .file-drop b{color:#fff;}
   .submit-row{margin-top:20px; display:flex; align-items:center; gap:14px;}
-  @media (max-width:900px){.inquiry-block{padding:36px 26px;} .inquiry-grid{grid-template-columns:1fr;} .form-grid{grid-template-columns:1fr;}}
+  @media (max-width:900px){.inquiry-block{padding:36px 26px;} .inquiry-grid{grid-template-columns:1fr;} .form-grid{grid-template-columns:1fr;} .inquiry-left{padding:20px;}}
 
   /* ---------- ABOUT ---------- */
   .about-grid{display:grid; grid-template-columns:1.1fr 0.9fr; gap:60px; align-items:start;}
@@ -270,7 +272,8 @@
   .detail-hero p{margin-top:16px; font-size:16.5px; line-height:1.6; color:#22242A; max-width:620px;}
   .detail-body{max-width:1120px; margin:0 auto; padding:70px 24px;}
   .gallery-section{background:var(--surface-soft); border-top:1px solid var(--hairline);}
-  .g-board{display:grid; grid-template-columns:repeat(auto-fill, minmax(200px,1fr)); gap:14px;}
+  .g-board{width:100%;}
+  .g-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:14px;}
   .g-cell{position:relative; border-radius:12px; overflow:hidden; aspect-ratio:4/3; cursor:pointer; background:#111; box-shadow:0 2px 10px rgba(0,0,0,0.08);}
   .g-cell img{width:100%; height:100%; object-fit:cover; transition:transform .35s ease, filter .35s ease; display:block;}
   .g-cell:hover img{transform:scale(1.06);}
@@ -303,7 +306,13 @@
   .lightbox-prev{left:18px;}
   .lightbox-next{right:18px;}
   .lightbox-count{position:absolute; bottom:18px; left:50%; transform:translateX(-50%); color:rgba(255,255,255,0.75); font-family:var(--mono); font-size:13px;}
-  @media (max-width:600px){.g-board{grid-template-columns:repeat(2,1fr);} .lightbox-nav{width:42px; height:42px; font-size:20px;}}
+  @media (max-width:600px){.g-grid{grid-template-columns:repeat(3,1fr); gap:6px;} .g-cell.placeholder span{font-size:10px; padding:2px;} .lightbox-nav{width:42px; height:42px; font-size:20px;}}
+  .g-pager{display:flex; align-items:center; justify-content:center; gap:16px; margin-top:20px;}
+  .g-pager-btn{padding:9px 18px; border:1.5px solid var(--hairline); background:#fff; border-radius:999px; font-weight:700; font-size:13.5px; cursor:pointer; transition:border-color .2s, color .2s;}
+  .g-pager-btn:hover:not(:disabled){border-color:var(--teal); color:var(--teal);}
+  .g-pager-btn:disabled{opacity:.35; cursor:default;}
+  .g-pager-count{font-family:var(--mono); font-size:13px; color:#6E7075; min-width:52px; text-align:center;}
+  @media (max-width:600px){.g-pager-btn{padding:7px 14px; font-size:12.5px;}}
 
   .home-gallery-teaser{position:relative; overflow:hidden; margin:34px auto 0; max-width:1200px; border-radius:16px; cursor:pointer;}
   .mq-track{display:flex; gap:12px; width:max-content; animation:mq-scroll 42s linear infinite;}
@@ -664,7 +673,7 @@
   <section id="inquiry">
     <div class="inquiry-block">
       <div class="inquiry-grid">
-        <div>
+        <div class="inquiry-left">
           <span class="eyebrow" style="color:var(--teal-soft);">CONTACT</span>
           <h2>강의를 문의해보세요</h2>
           <p>기관명과 희망 강의 분야만 남겨주셔도 됩니다. 확인 후 빠르게 커리큘럼과 견적을 안내드립니다.</p>
@@ -681,18 +690,20 @@
             </div>
           </div>
         </div>
-        <form id="inquiryForm" onsubmit="submitInquiry(event)" class="form-grid">
-          <div><label>기관명 *</label><input id="inqOrg" placeholder="예: OO진로지원센터" required></div>
-          <div><label>담당자명 *</label><input id="inqName" placeholder="이름" required></div>
-          <div><label>연락처 *</label><input id="inqPhone" placeholder="010-0000-0000" required></div>
-          <div><label>이메일</label><input id="inqEmail" type="email" placeholder="example@email.com"></div>
-          <div class="full"><label>희망 강의 분야</label>
-            <select id="inqField"><option>청소년 진로·취업교육</option><option>AI·과학교구 교육</option><option>장애인 취업코칭</option><option>대학·기관 컨설팅</option><option>기타(직접 문의)</option></select>
-          </div>
-          <div class="full"><label>문의 내용</label><textarea id="inqMsg" placeholder="희망 인원, 시기, 예산 등을 자유롭게 남겨주세요"></textarea></div>
-          <div class="full submit-row"><button class="cta-pill" type="submit">문의 보내기</button><span style="font-size:12px; color:#9A9CA1;">제출 시 담당자에게 바로 전달됩니다</span></div>
-        </form>
-        <p id="inquirySentMsg" style="display:none; margin-top:14px; font-weight:700; color:var(--teal);">✓ 문의 내용이 전달되었습니다. 담당자가 확인 후 연락드리겠습니다.</p>
+        <div class="inquiry-right">
+          <form id="inquiryForm" onsubmit="submitInquiry(event)" class="form-grid">
+            <div><label>기관명 *</label><input id="inqOrg" placeholder="예: OO진로지원센터" required></div>
+            <div><label>담당자명 *</label><input id="inqName" placeholder="이름" required></div>
+            <div><label>연락처 *</label><input id="inqPhone" placeholder="010-0000-0000" required></div>
+            <div><label>이메일</label><input id="inqEmail" type="email" placeholder="example@email.com"></div>
+            <div class="full"><label>희망 강의 분야</label>
+              <select id="inqField"><option>청소년 진로·취업교육</option><option>AI·과학교구 교육</option><option>장애인 취업코칭</option><option>대학·기관 컨설팅</option><option>기타(직접 문의)</option></select>
+            </div>
+            <div class="full"><label>문의 내용</label><textarea id="inqMsg" placeholder="희망 인원, 시기, 예산 등을 자유롭게 남겨주세요"></textarea></div>
+            <div class="full submit-row"><button class="cta-pill" type="submit">문의 보내기</button><span style="font-size:12px; color:#9A9CA1;">제출 시 담당자에게 바로 전달됩니다</span></div>
+          </form>
+          <p id="inquirySentMsg" style="display:none; margin-top:14px; font-weight:700; color:var(--teal);">✓ 문의 내용이 전달되었습니다. 담당자가 확인 후 연락드리겠습니다.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -893,11 +904,21 @@
   // ===== Supabase 연동 =====
   const SUPABASE_URL = 'https://mrusqqnnahohuhspdaiu.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_JWW08HZ-DWoe0finv83FPA_HOhm7rnB';
-  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  let sb = null;
+  try {
+    if(window.supabase && typeof window.supabase.createClient === 'function'){
+      sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    } else {
+      console.error('Supabase 라이브러리를 불러오지 못했습니다. 네트워크 연결을 확인해주세요.');
+    }
+  } catch(e){
+    console.error('Supabase 클라이언트 생성 실패', e);
+  }
   let REMOTE = { texts:{}, images:{}, partners:[], docs:{}, testimonials:[], faqs:[], galleries:{} };
   let remoteReady = false;
 
   async function uploadToStorage(path, fileOrBlob){
+    if(!sb) throw new Error('서버 연결이 되어 있지 않습니다.');
     const { error } = await sb.storage.from('site-media').upload(path, fileOrBlob, { upsert: true, cacheControl: '3600' });
     if(error) throw error;
     const { data } = sb.storage.from('site-media').getPublicUrl(path);
@@ -1041,20 +1062,42 @@
     const overrides = loadGalleryOverrides();
     return (overrides[axis] && overrides[axis].length) ? overrides[axis] : GALLERY_DEFAULTS[axis];
   }
+  const BOARD_PAGE_SIZE = 15;
+  let boardPage = { youth: 0, ai: 0, disability: 0, consulting: 0 };
   function renderBoard(axis){
     const board = document.getElementById('board-' + axis);
     if(!board) return;
     const imgs = getGalleryFor(axis);
-    const slots = Math.max(15, imgs.length);
-    let html = '';
-    for(let i = 0; i < slots; i++){
-      if(imgs[i]){
-        html += '<div class="g-cell" onclick="openLightboxFor(\'' + axis + '\',' + i + ')"><img src="' + imgs[i] + '" alt="' + AXIS_LABELS[axis] + ' 현장 사진 ' + (i+1) + '" loading="lazy"></div>';
+    const totalPages = Math.max(1, Math.ceil(imgs.length / BOARD_PAGE_SIZE));
+    if(boardPage[axis] === undefined || boardPage[axis] >= totalPages) boardPage[axis] = totalPages - 1;
+    if(boardPage[axis] < 0) boardPage[axis] = 0;
+    const page = boardPage[axis];
+    const startIdx = page * BOARD_PAGE_SIZE;
+    let html = '<div class="g-grid">';
+    for(let i = 0; i < BOARD_PAGE_SIZE; i++){
+      const globalIndex = startIdx + i;
+      if(imgs[globalIndex]){
+        html += '<div class="g-cell" onclick="openLightboxFor(\'' + axis + '\',' + globalIndex + ')"><img src="' + imgs[globalIndex] + '" alt="' + AXIS_LABELS[axis] + ' 현장 사진 ' + (globalIndex+1) + '" loading="lazy"></div>';
       } else {
         html += '<div class="g-cell placeholder"><span>사진 준비중</span></div>';
       }
     }
+    html += '</div>';
+    if(totalPages > 1){
+      html += '<div class="g-pager">'
+        + '<button type="button" class="g-pager-btn" onclick="boardPrev(\'' + axis + '\')"' + (page === 0 ? ' disabled' : '') + '>‹ 이전</button>'
+        + '<span class="g-pager-count">' + (page + 1) + ' / ' + totalPages + '</span>'
+        + '<button type="button" class="g-pager-btn" onclick="boardNext(\'' + axis + '\')"' + (page === totalPages - 1 ? ' disabled' : '') + '>다음 ›</button>'
+        + '</div>';
+    }
     board.innerHTML = html;
+  }
+  function boardPrev(axis){
+    if(boardPage[axis] > 0){ boardPage[axis]--; renderBoard(axis); }
+  }
+  function boardNext(axis){
+    boardPage[axis] = (boardPage[axis] || 0) + 1;
+    renderBoard(axis);
   }
   function renderTeaser(axis){
     const wrap = document.getElementById('teaser-' + axis);
@@ -1332,6 +1375,7 @@
 
   async function initRemote(){
     try {
+      if(!sb) throw new Error('서버 연결이 되어 있지 않습니다.');
       const { data, error } = await sb.from('site_content').select('*').eq('id', 1).single();
       if(!error && data){
         REMOTE = {
@@ -1775,6 +1819,10 @@
   }
 
   async function adminSave(){
+    if(!sb){
+      alert('서버 연결이 되어 있지 않아 저장할 수 없습니다. 인터넷 연결을 확인하고 페이지를 새로고침한 뒤 다시 시도해주세요.');
+      return;
+    }
     const partnerLines = document.getElementById('adminPartnersList').value
       .split('\n').map(function(s){ return s.trim(); }).filter(function(s){ return s.length > 0; });
     adminPartnersState = partnerLines;
@@ -1816,6 +1864,10 @@
   }
   async function adminReset(){
     if(!confirm('저장된 모든 변경사항(텍스트·이미지·기관목록·커리큘럼 파일·후기·FAQ)을 지우고 기본값으로 되돌릴까요?')) return;
+    if(!sb){
+      alert('서버 연결이 되어 있지 않아 초기화할 수 없습니다. 인터넷 연결을 확인하고 다시 시도해주세요.');
+      return;
+    }
 
     const payload = { texts:{}, images:{}, partners:[], docs:{}, testimonials:[], faqs:[], galleries:{} };
     const { error } = await sb.from('site_content').update(payload).eq('id', 1);
