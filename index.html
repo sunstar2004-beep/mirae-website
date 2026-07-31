@@ -316,13 +316,13 @@
   .g-pager-count{font-family:var(--mono); font-size:13px; color:#6E7075; min-width:52px; text-align:center;}
   @media (max-width:600px){.g-pager-btn{padding:7px 14px; font-size:12.5px;}}
 
-  .home-gallery-teaser{position:relative; overflow:hidden; margin-top:32px; border-radius:14px; background:rgba(255,255,255,0.32); padding:14px 14px 6px;}
-  .mq-track{display:flex; gap:12px; width:max-content; animation:mq-scroll 42s linear infinite;}
+  .home-gallery-teaser{position:relative; overflow:hidden; margin-top:28px; border-radius:14px;}
+  .mq-track{display:flex; gap:10px; width:max-content; animation:mq-scroll 42s linear infinite;}
   .home-gallery-teaser:hover .mq-track{animation-play-state:paused;}
-  .mq-item{flex:0 0 auto; height:190px; border-radius:10px; overflow:hidden;}
+  .mq-item{flex:0 0 auto; height:270px; border-radius:12px; overflow:hidden;}
   .mq-item img{height:100%; width:auto; display:block; object-fit:cover;}
   @keyframes mq-scroll{from{transform:translateX(0);} to{transform:translateX(-50%);}}
-  .mq-caption{margin-top:12px; text-align:center; font-size:14px; font-weight:600; color:#3a3d42; cursor:pointer; text-decoration:underline; text-underline-offset:3px;}
+  .mq-caption{margin-top:14px; text-align:center; font-size:14px; font-weight:600; color:#3a3d42; cursor:pointer; text-decoration:underline; text-underline-offset:3px;}
   @media (max-width:600px){.mq-item{height:120px;}}
   .detail-cols{display:grid; grid-template-columns:1fr 1fr; gap:44px;}
   .card-list{display:flex; flex-direction:column; gap:12px;}
@@ -504,11 +504,12 @@
         <div class="block-item"><b>자기소개서·모의면접</b><span>취업서류 첨삭 및 실전 면접 코칭</span></div>
         <div class="block-item"><b>창직·창업캠프</b><span>기업가정신 캠프, 진로 미선택자 워크숍</span></div>
       </div>
+    </div>
       <div class="home-gallery-teaser" id="teaser-youth" data-axis="youth">
         <div class="mq-track"></div>
         <div class="mq-caption" onclick="go('youth')" role="button" tabindex="0">청소년 진로·취업교육 현장 &nbsp;→&nbsp; 더 많은 사진 보기</div>
       </div>
-    </div></div></div>
+    </div></div>
 
     <div class="block-wrap"><div class="block block-blue"><div class="block-grid">
       <div><span class="eyebrow">02 · AI · SCIENCE KIT</span><h2 data-edit="block_ai_title">AI·과학교구 교육</h2><p class="desc" data-edit="block_ai_desc">손으로 만들고 코드로 구현하며, 기술을 다루는 힘을 키웁니다.</p>
@@ -518,11 +519,12 @@
         <div class="block-item"><b>메이커교육</b><span>과학이론 + 교구 제작 프로그램</span></div>
         <div class="block-item"><b>생성형 AI·영상 제작</b><span>성인학습자 대상 실무 활용 교육</span></div>
       </div>
+    </div>
       <div class="home-gallery-teaser" id="teaser-ai" data-axis="ai" style="display:none;">
         <div class="mq-track"></div>
         <div class="mq-caption" onclick="go('ai')" role="button" tabindex="0">AI·과학교구 교육 현장 &nbsp;→&nbsp; 더 많은 사진 보기</div>
       </div>
-    </div></div></div>
+    </div></div>
 
     <div class="block-wrap"><div class="block block-green"><div class="block-grid">
       <div><span class="eyebrow">03 · EMPLOYMENT COACHING</span><h2 data-edit="block_disability_title">장애인 취업코칭</h2><p class="desc" data-edit="block_disability_desc">한 걸음이 절실한 순간, 채용까지 함께 걷습니다.</p>
@@ -532,11 +534,12 @@
         <div class="block-item"><b>장애인 인식개선교육</b><span>기업·기관 대상 인식개선 프로그램</span></div>
         <div class="block-item"><b>취업역량 특강</b><span>이미지메이킹, 자활센터 연계 프로그램</span></div>
       </div>
+    </div>
       <div class="home-gallery-teaser" id="teaser-disability" data-axis="disability" style="display:none;">
         <div class="mq-track"></div>
         <div class="mq-caption" onclick="go('disability')" role="button" tabindex="0">장애인 취업코칭 현장 &nbsp;→&nbsp; 더 많은 사진 보기</div>
       </div>
-    </div></div></div>
+    </div></div>
 
     <div class="block-wrap"><div class="block block-navy"><div class="block-grid">
       <div><span class="eyebrow">04 · UNIVERSITY & INSTITUTION</span><h2 data-edit="block_consulting_title">대학·기관 컨설팅</h2><p class="desc" data-edit="block_consulting_desc">대학의 고민부터 지역의 과제까지, 현장에서 검증된 해법으로 함께 풉니다.</p>
@@ -546,11 +549,12 @@
         <div class="block-item"><b>도시재생 사업</b><span>마을 브랜드 개발, 지역문제해결 프로그램</span></div>
         <div class="block-item"><b>지자체·공공기관 컨설팅</b><span>정책연구, 위탁운영, 수요조사</span></div>
       </div>
+    </div>
       <div class="home-gallery-teaser" id="teaser-consulting" data-axis="consulting" style="display:none;">
         <div class="mq-track"></div>
         <div class="mq-caption" onclick="go('consulting')" role="button" tabindex="0">대학·기관 컨설팅 현장 &nbsp;→&nbsp; 더 많은 사진 보기</div>
       </div>
-    </div></div></div>
+    </div></div>
 
     <!-- 강의 기획안 (강의 섹션 하위) -->
     <div id="resources" style="margin-top:64px; padding-top:56px; border-top:1px solid var(--hairline);">
