@@ -505,7 +505,7 @@
       <a class="link" data-route="ai" onclick="go('ai')">AI·과학교구</a>
       <a class="link" data-route="disability" onclick="go('disability')">장애인 취업코칭</a>
       <a class="link" data-route="consulting" onclick="go('consulting')">대학·기관 컨설팅</a>
-      <a class="link" data-route="team" onclick="go('team')">강사진</a>
+      <a class="link" id="teamNavLink" data-route="team" onclick="go('team')">강사진</a>
       <button class="cta-pill" id="navCta" onclick="goInquiry()">강의 문의하기</button>
     </nav>
   </div>
@@ -1342,6 +1342,7 @@
     }
     return full;
   }
+  const TEASER_PX_PER_SECOND = 55;
   function renderTeaser(axis){
     const wrap = document.getElementById('teaser-' + axis);
     if(!wrap) return;
@@ -1351,9 +1352,20 @@
     const track = wrap.querySelector('.mq-track');
     const itemsHtml = imgs.map(function(s){ return '<div class="mq-item"><img src="' + s + '" alt="' + AXIS_LABELS[axis] + ' 현장 사진" loading="lazy"></div>'; }).join('');
     track.innerHTML = itemsHtml + itemsHtml;
-    const secondsPerPhoto = 3.4;
-    const duration = Math.max(20, imgs.length * secondsPerPhoto);
-    track.style.animationDuration = duration + 's';
+    track.style.animationDuration = '600s';
+    const imgEls = Array.from(track.querySelectorAll('img'));
+    const loadPromises = imgEls.map(function(img){
+      if(img.complete) return Promise.resolve();
+      return new Promise(function(resolve){
+        img.addEventListener('load', resolve);
+        img.addEventListener('error', resolve);
+      });
+    });
+    Promise.all(loadPromises).then(function(){
+      const oneCopyWidth = track.scrollWidth / 2;
+      const duration = Math.max(14, oneCopyWidth / TEASER_PX_PER_SECOND);
+      track.style.animationDuration = duration + 's';
+    });
   }
   function renderAllGalleries(){
     GALLERY_AXES.forEach(function(axis){ renderBoard(axis); renderTeaser(axis); });
@@ -1689,6 +1701,14 @@
   function isTeamMarqueeVisible(){
     return REMOTE.settings && REMOTE.settings.teamMarqueeVisible === false ? false : true;
   }
+  function isTeamNavVisible(){
+    return REMOTE.settings && REMOTE.settings.teamNavVisible === false ? false : true;
+  }
+  function renderTeamNavVisibility(){
+    const visible = isTeamNavVisible();
+    const link = document.getElementById('teamNavLink');
+    if(link) link.style.display = visible ? '' : 'none';
+  }
 
   // ===== 강사진 =====
   function loadTeam(){
@@ -1888,6 +1908,7 @@
     renderTeamPage();
     renderTeamMarquee();
     renderAllDetailExtras();
+    renderTeamNavVisibility();
   renderDocs();
 
   async function initRemote(){
@@ -1923,6 +1944,7 @@
     renderTeamPage();
     renderTeamMarquee();
     renderAllDetailExtras();
+    renderTeamNavVisibility();
     renderDocs();
     renderAllGalleries();
   }
@@ -2018,7 +2040,7 @@
 
     adminDocsState = Object.assign({}, loadDocOverrides());
     adminTestimonialsState = loadTestimonials().map(function(t){ return Object.assign({}, t); });
-    adminSettingsState = { testimonialsVisible: isTestimonialsVisible(), member2Visible: isMember2Visible(), teamMarqueeVisible: isTeamMarqueeVisible() };
+    adminSettingsState = { testimonialsVisible: isTestimonialsVisible(), member2Visible: isMember2Visible(), teamMarqueeVisible: isTeamMarqueeVisible(), teamNavVisible: isTeamNavVisible() };
     adminFaqState = loadFaqs().map(function(f){ return Object.assign({}, f); });
     adminTeamState = loadTeam().map(function(t){ return Object.assign({}, t); });
     adminDetailListsState = {};
@@ -2435,6 +2457,10 @@
           + '<input type="checkbox" style="width:20px; height:20px;" ' + (adminSettingsState.teamMarqueeVisible !== false ? 'checked' : '') + ' onchange="adminSettingsState.teamMarqueeVisible=this.checked">'
           + '메인페이지에 강사진 미리보기 섹션 표시하기 (체크 해제하면 대표강사가 있어도 메인에서 숨겨집니다)'
           + '</label></div>';
+    html += '<div class="admin-field"><label style="display:flex; align-items:center; gap:10px; cursor:pointer;">'
+          + '<input type="checkbox" style="width:20px; height:20px;" ' + (adminSettingsState.teamNavVisible !== false ? 'checked' : '') + ' onchange="adminSettingsState.teamNavVisible=this.checked">'
+          + '맨 위 메뉴 목록에 "강사진" 항목 표시하기 (체크 해제하면 상단 메뉴에서 안 보이고, 페이지 자체는 그대로 있어요)'
+          + '</label></div>';
     html += '<p style="color:#6E7075; font-size:13.5px; margin-bottom:18px;">강사를 추가·수정·삭제할 수 있어요. "대표강사로 메인 노출"을 체크한 강사만 메인페이지에 흐르는 형태로 보여지고, 전체 명단은 항상 "강사진" 페이지에서 볼 수 있어요.</p>';
     adminTeamState.forEach(function(t, i){
       html += '<div class="admin-field" style="border:1px solid var(--hairline); border-radius:12px; padding:18px;">';
@@ -2610,6 +2636,7 @@
     renderTeamPage();
     renderTeamMarquee();
     renderAllDetailExtras();
+    renderTeamNavVisibility();
 
     const msg = document.getElementById('adminSavedMsg');
     msg.style.display = 'block';
@@ -2639,7 +2666,7 @@
     adminDocsState = {};
     adminTestimonialsState = TESTIMONIALS_DEFAULT.map(function(t){ return Object.assign({}, t); });
     adminFaqState = FAQ_DEFAULT.map(function(f){ return Object.assign({}, f); });
-    adminSettingsState = { testimonialsVisible: true, member2Visible: false, teamMarqueeVisible: true };
+    adminSettingsState = { testimonialsVisible: true, member2Visible: false, teamMarqueeVisible: true, teamNavVisible: true };
     adminTeamState = [];
     adminDetailListsState = {};
     GALLERY_AXES.forEach(function(axis){
@@ -2675,6 +2702,7 @@
     renderTeamPage();
     renderTeamMarquee();
     renderAllDetailExtras();
+    renderTeamNavVisibility();
   }
 
 </script>
