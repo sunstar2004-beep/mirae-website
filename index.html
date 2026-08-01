@@ -1226,6 +1226,52 @@
     sideNav.classList.toggle('visible', onHome);
   }
 
+  // 모바일: 드래그로 사이드 내비 위치 이동, 다음 방문에도 유지
+  (function initSideNavDrag(){
+    if(window.innerWidth > 1024) return;
+    const SIDE_NAV_POS_KEY = 'mireSideNavTopMobile';
+    const savedTop = localStorage.getItem(SIDE_NAV_POS_KEY);
+    if(savedTop){
+      sideNav.style.top = savedTop + 'px';
+      sideNav.style.transform = 'none';
+    }
+    let dragging = false, moved = false, startY = 0, startTop = 0, justDragged = false;
+    sideNav.addEventListener('touchstart', function(e){
+      dragging = true;
+      moved = false;
+      startY = e.touches[0].clientY;
+      startTop = sideNav.getBoundingClientRect().top;
+    }, { passive: true });
+    sideNav.addEventListener('touchmove', function(e){
+      if(!dragging) return;
+      const dy = e.touches[0].clientY - startY;
+      if(Math.abs(dy) > 8) moved = true;
+      if(moved){
+        e.preventDefault();
+        let newTop = startTop + dy;
+        const maxTop = window.innerHeight - sideNav.offsetHeight - 10;
+        newTop = Math.max(10, Math.min(maxTop, newTop));
+        sideNav.style.top = newTop + 'px';
+        sideNav.style.transform = 'none';
+      }
+    }, { passive: false });
+    sideNav.addEventListener('touchend', function(){
+      if(dragging && moved){
+        const finalTop = parseFloat(sideNav.style.top);
+        localStorage.setItem(SIDE_NAV_POS_KEY, finalTop);
+        justDragged = true;
+        setTimeout(function(){ justDragged = false; }, 300);
+      }
+      dragging = false;
+    }, { passive: true });
+    sideNav.addEventListener('click', function(e){
+      if(justDragged){
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }, true);
+  })();
+
   // highlight the section currently in view
   const sideLinks = Array.from(sideNav.querySelectorAll('a'));
   const sectionIds = sideLinks.map(a=>a.dataset.target);
@@ -1986,8 +2032,7 @@
   window.addEventListener('scroll', updateTopFab, {passive:true});
 
   // ===== 관리자 페이지 =====
-  const ADMIN_PASSWORD_DEFAULT = 'mirae2026';
-  function getAdminPassword(){ return localStorage.getItem('mireAdminPw') || ADMIN_PASSWORD_DEFAULT; }
+  const ADMIN_EMAIL = 'admin@mirae-injae.local';
   let adminGalleryState = {};
   let adminTextState = {};
   let adminImageState = {};
@@ -2002,13 +2047,21 @@
   let rteSavedRange = null;
   let rteSavedKey = null;
 
-  function adminLogin(){
+  async function adminLogin(){
     if(!remoteReady){
       alert('서버에서 데이터를 아직 불러오는 중입니다. 몇 초 후 다시 시도해주세요.');
       return;
     }
+    if(!sb){
+      alert('서버 연결이 되어 있지 않습니다. 인터넷 연결을 확인하고 새로고침 후 다시 시도해주세요.');
+      return;
+    }
     const pw = document.getElementById('adminPwInput').value;
-    if(pw !== getAdminPassword()){
+    const loginBtn = document.querySelector('#adminLock button');
+    if(loginBtn){ loginBtn.disabled = true; loginBtn.textContent = '확인 중...'; }
+    const { error } = await sb.auth.signInWithPassword({ email: ADMIN_EMAIL, password: pw });
+    if(loginBtn){ loginBtn.disabled = false; loginBtn.textContent = '입장하기'; }
+    if(error){
       document.getElementById('adminLoginError').style.display = 'block';
       return;
     }
@@ -2308,38 +2361,29 @@
     adminTextState[key].content = plain;
   }
 
-  const MASTER_CODE = '1004';
   function buildAdminPasswordSection(){
     const container = document.getElementById('adminPasswordSection');
     let html = '';
-    html += '<p style="color:#6E7075; font-size:13.5px; margin-bottom:18px;">관리자페이지에 들어올 때 쓰는 비밀번호를 바꿀 수 있어요. 현재 비밀번호를 몰라도, 마스터 번호만 알면 새 비밀번호로 바꿀 수 있어요. 바꾸면 이 브라우저(도메인)에 저장되고, 다음 로그인부터 새 비밀번호를 써야 해요.</p>';
+    html += '<p style="color:#6E7075; font-size:13.5px; margin-bottom:18px;">관리자페이지 비밀번호를 바꿀 수 있어요. 지금 로그인되어 있는 상태이므로 새 비밀번호만 입력하시면 됩니다.</p>';
     html += '<div class="admin-field">';
-    html += '<label>마스터 번호</label><input type="password" id="pwMasterInput" placeholder="마스터 번호를 입력하세요">';
-    html += '</div>';
-    html += '<div class="admin-field">';
-    html += '<label>새 비밀번호</label><input type="password" id="pwNewInput" placeholder="새 비밀번호를 입력하세요">';
+    html += '<label>새 비밀번호</label><input type="password" id="pwNewInput" placeholder="새 비밀번호를 입력하세요 (6자 이상)">';
     html += '</div>';
     html += '<div class="admin-field">';
     html += '<label>새 비밀번호 확인</label><input type="password" id="pwNewInput2" placeholder="새 비밀번호를 한 번 더 입력하세요">';
     html += '</div>';
     html += '<button type="button" class="admin-btn primary" onclick="adminChangePassword()">비밀번호 변경하기</button>';
     html += '<p id="pwChangeMsg" style="display:none; margin-top:12px; font-weight:700;"></p>';
+    html += '<p style="color:#9A9CA1; font-size:12.5px; margin-top:18px;">비밀번호를 잊어버리셨다면, 이 화면에서는 바꿀 수 없어요 — Supabase 대시보드(Authentication 메뉴)에서 직접 재설정해주셔야 합니다.</p>';
     container.innerHTML = html;
   }
-  function adminChangePassword(){
-    const master = document.getElementById('pwMasterInput').value;
+  async function adminChangePassword(){
     const next = document.getElementById('pwNewInput').value;
     const next2 = document.getElementById('pwNewInput2').value;
     const msg = document.getElementById('pwChangeMsg');
     msg.style.display = 'block';
-    if(master !== MASTER_CODE){
+    if(!next || next.length < 6){
       msg.style.color = '#C0392B';
-      msg.textContent = '마스터 번호가 올바르지 않습니다.';
-      return;
-    }
-    if(!next || next.length < 4){
-      msg.style.color = '#C0392B';
-      msg.textContent = '새 비밀번호는 4자 이상 입력해주세요.';
+      msg.textContent = '새 비밀번호는 6자 이상 입력해주세요.';
       return;
     }
     if(next !== next2){
@@ -2347,10 +2391,19 @@
       msg.textContent = '새 비밀번호가 서로 일치하지 않습니다.';
       return;
     }
-    localStorage.setItem('mireAdminPw', next);
+    if(!sb){
+      msg.style.color = '#C0392B';
+      msg.textContent = '서버 연결이 되어 있지 않아 변경할 수 없습니다.';
+      return;
+    }
+    const { error } = await sb.auth.updateUser({ password: next });
+    if(error){
+      msg.style.color = '#C0392B';
+      msg.textContent = '비밀번호 변경에 실패했습니다: ' + error.message;
+      return;
+    }
     msg.style.color = 'var(--teal)';
     msg.textContent = '✓ 비밀번호가 변경되었습니다. 다음 로그인부터 새 비밀번호를 사용하세요.';
-    document.getElementById('pwMasterInput').value = '';
     document.getElementById('pwNewInput').value = '';
     document.getElementById('pwNewInput2').value = '';
   }
