@@ -2073,10 +2073,12 @@
 
   function buildAdminImagesSection(){
     const container = document.getElementById('adminImagesSection');
+    const openState = {};
+    container.querySelectorAll('details[id]').forEach(function(d){ openState[d.id] = d.open; });
     let html = '';
     html += '<p style="color:#6E7075; font-size:13.5px; margin-bottom:18px;">로고와 프로필 사진은 새 파일을 올리면 바로 교체됩니다. 현장 사진은 추가하거나 삭제할 수 있고, 메인 화면 미리보기와 상세페이지 게시판에 함께 반영됩니다. 사진 옆 "대표사진" 체크박스를 켜면, 그 사진들만 메인페이지 슬라이드에 사용됩니다(하나도 안 고르면 전체 사진이 다 흐릅니다).</p>';
 
-    html += '<details class="admin-accordion-page"><summary>기본 이미지 (로고·프로필)</summary><div class="admin-accordion-body">';
+    html += '<details class="admin-accordion-page" id="admin-acc-base"><summary>기본 이미지 (로고·프로필)</summary><div class="admin-accordion-body">';
     html += '<div class="admin-field"><label style="display:flex; align-items:center; gap:10px; cursor:pointer;">'
           + '<input type="checkbox" style="width:20px; height:20px;" ' + (adminSettingsState.member2Visible ? 'checked' : '') + ' onchange="adminSettingsState.member2Visible=this.checked">'
           + '기관소개에 소속원2 카드 표시하기 (사진·이름·소개를 입력하신 뒤 여기서 켜주세요)'
@@ -2091,7 +2093,7 @@
     GALLERY_AXES.forEach(function(axis){
       const imgs = adminGalleryState[axis] || [];
       const featured = adminTeaserPhotosState[axis] || [];
-      html += '<details class="admin-accordion-page"><summary>' + AXIS_LABELS[axis] + ' 현장 사진 (' + imgs.length + '장)</summary><div class="admin-accordion-body">';
+      html += '<details class="admin-accordion-page" id="admin-acc-' + axis + '"><summary>' + AXIS_LABELS[axis] + ' 현장 사진 (' + imgs.length + '장)</summary><div class="admin-accordion-body">';
       html += '<div class="admin-gallery-grid" id="admin-gallery-' + axis + '">';
       imgs.forEach(function(src, i){
         const isFeatured = featured.indexOf(src) !== -1;
@@ -2102,6 +2104,9 @@
       html += '</div><input type="file" accept="image/*" multiple class="admin-file-input" onchange="adminAddPhotos(\'' + axis + '\', this.files)"></div></details>';
     });
     container.innerHTML = html;
+    container.querySelectorAll('details[id]').forEach(function(d){
+      if(openState[d.id]) d.open = true;
+    });
   }
   function compressImageFile(file, maxDim, quality){
     return new Promise(function(resolve){
