@@ -91,6 +91,12 @@
   .detail-context p{max-width:760px; margin:0 auto; font-size:16.5px; line-height:1.9; color:#3a3d42; text-align:center;}
   .case-grid{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:22px;}
   .case-card{background:var(--surface-soft); border:1px solid var(--hairline); border-radius:16px; padding:26px;}
+  .case-card .case-photo{width:100%; height:160px; object-fit:cover; border-radius:10px; margin-bottom:16px; display:block;}
+  .curriculum-list{display:grid; grid-template-columns:repeat(auto-fill, minmax(220px,1fr)); gap:16px; margin-top:8px;}
+  .curr-card{background:#fff; border:1px solid var(--hairline); border-radius:14px; padding:22px 20px;}
+  .curr-num{display:inline-block; font-family:var(--mono); font-size:12px; font-weight:700; color:#fff; background:var(--teal); border-radius:999px; padding:3px 12px; margin-bottom:10px;}
+  .curr-card h4{font-size:16px; font-weight:800; margin-bottom:8px;}
+  .curr-card p{font-size:13.5px; color:#5C5F65; line-height:1.65;}
   .case-card h3{font-size:17px; font-weight:800; margin-bottom:10px; letter-spacing:-0.01em;}
   .case-card p{font-size:14px; color:#5C5F65; line-height:1.75;}
   @media (max-width:700px){.case-grid{grid-template-columns:1fr;}}
@@ -101,30 +107,31 @@
   .process-step p{font-size:13px; color:#5C5F65; line-height:1.65;}
 
   /* 강사진 */
-  .team-grid{display:flex; gap:14px; align-items:stretch;}
-  .team-card{flex:1 1 0; min-width:0; background:#fff; border:1px solid var(--hairline); border-radius:16px; overflow:hidden; cursor:pointer; transition:flex-grow .4s ease, box-shadow .2s;}
+  .team-grid{display:flex; flex-wrap:nowrap; justify-content:flex-start; gap:14px; align-items:flex-start;}
+  .team-card{flex: 0 0 calc((100% - 7 * 14px) / 8); min-width:0; background:#fff; border:1px solid var(--hairline); border-radius:16px; overflow:hidden; cursor:pointer; transition:flex-grow .4s ease, flex-basis .4s ease, box-shadow .2s;}
   .team-card:hover{box-shadow:0 10px 24px rgba(0,0,0,0.08);}
-  .team-card img{width:100%; aspect-ratio:3/3.3; object-fit:cover; display:block; background:#eee; transition:aspect-ratio .4s ease;}
+  .team-card img{width:100%; aspect-ratio:3/3.3; object-fit:cover; object-position:center 20%; display:block; background:#eee;}
   .team-card-noimg{width:100%; aspect-ratio:3/3.3; background:var(--surface-soft);}
   .team-card-body{padding:14px 14px 18px;}
   .team-card-role{font-size:11.5px; color:var(--teal); font-weight:700;}
   .team-card-name{font-size:15.5px; font-weight:800; margin:4px 0 6px;}
   .team-card-bio{font-size:12.5px; color:#5C5F65; line-height:1.55; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
-  .team-card.expanded{flex:4 1 0;}
-  .team-card.expanded img{aspect-ratio:16/9;}
+  .team-card.expanded{flex:1 1 32%;}
   .team-card.expanded .team-card-name{font-size:20px;}
   .team-card.expanded .team-card-bio{-webkit-line-clamp:unset; font-size:14px;}
-  .team-card.shrunk{flex:0.5 1 0;}
+  .team-card.shrunk{flex:0 1 7%;}
   .team-card.shrunk .team-card-bio{display:none;}
   .team-card.shrunk .team-card-name{font-size:13px;}
   .team-card-detail{margin-top:12px; padding-top:12px; border-top:1px solid var(--hairline); font-size:13.5px; color:#5C5F65; line-height:1.8; white-space:pre-line;}
   .team-pager{margin-top:20px;}
   @media (max-width:700px){
+    .team-grid{gap:8px;}
+    .team-card{flex: 0 0 calc((100% - 2 * 8px) / 3);}
     .team-card-body{padding:10px 10px 14px;}
     .team-card-name{font-size:13.5px;}
     .team-card-bio{font-size:11.5px;}
-    .team-card.expanded{flex:5 1 0;}
-    .team-card.shrunk{flex:0.4 1 0;}
+    .team-card.expanded{flex:1 1 55%;}
+    .team-card.shrunk{flex:0 1 15%;}
     .team-card.shrunk .team-card-body{padding:8px 6px;}
   }
   .team-marquee-wrap{position:relative; overflow:hidden; max-width:1200px; margin:40px auto 0; padding:0 24px;}
@@ -798,9 +805,8 @@
       <div class="item"><b>창직·창업캠프</b><span>보드게임 창직, 기업가정신 캠프, 진로 미선택자를 위한 특강</span></div>
     </div>
     <div>
-      <div class="side-box"><h3>대상</h3><p data-edit="youth_side1">중·고등학교, 특성화고, 대학교 재학생 및 진로 전환기 학생</p></div>
-      <div class="side-box"><h3>주요 진행 사례</h3><p data-edit="youth_side2">경남공업고등학교, 배정미래고등학교, 창원공업고등학교, 울산 학성여고, 명지중·남천초·좌천초 등</p></div>
-      <div class="tag-row"><span class="tag">진로체험</span><span class="tag">자기소개서</span><span class="tag">모의면접</span><span class="tag">창업캠프</span></div>
+      <div class="sideboxes" id="sideboxes-youth"></div>
+      <div class="tag-row" id="tags-youth"></div>
     </div>
   </div></section>
 
@@ -808,16 +814,16 @@
     <div class="detail-body" style="padding-top:0;">
       <span class="eyebrow" style="color:var(--teal);">CASE</span>
       <h2 style="font-size:clamp(26px,3.2vw,36px); font-weight:800; letter-spacing:-0.02em; margin-bottom:10px;">대표 사례</h2>
-      <div class="case-grid">
-        <div class="case-card">
-          <h3 data-edit="youth_case1_title">사례 제목을 입력해주세요</h3>
-          <p data-edit="youth_case1_desc">실제 진행하신 강의나 컨설팅 사례를 짧은 스토리로 남겨주세요. (배경, 진행 방식, 성과 등)</p>
-        </div>
-        <div class="case-card">
-          <h3 data-edit="youth_case2_title">사례 제목을 입력해주세요</h3>
-          <p data-edit="youth_case2_desc">실제 진행하신 강의나 컨설팅 사례를 짧은 스토리로 남겨주세요. (배경, 진행 방식, 성과 등)</p>
-        </div>
-      </div>
+      <div class="case-grid" id="cases-youth"></div>
+    </div>
+  </section>
+  <section class="curriculum-section">
+    <div class="detail-body" style="padding-top:0;">
+      <span class="eyebrow" style="color:var(--teal);">CURRICULUM</span>
+      <h2 style="font-size:clamp(26px,3.2vw,36px); font-weight:800; letter-spacing:-0.02em; margin-bottom:10px;">커리큘럼 소개</h2>
+      <p style="color:#5C5F65; font-size:15.5px; margin-bottom:24px;">회차별로 진행되는 커리큘럼을 소개합니다.</p>
+      <div class="curriculum-list" id="curriculum-youth"></div>
+      <p id="curriculumEmpty-youth" style="display:none; text-align:center; color:#9A9CA1; font-size:14.5px; padding:20px 0;">커리큘럼 소개가 준비 중입니다.</p>
     </div>
   </section>
   <section class="process-section">
@@ -860,9 +866,8 @@
       <div class="item"><b>생성형 AI·영상 제작</b><span>성인학습자 대상 생성형 AI 기초, 쇼츠 제작 교육</span></div>
     </div>
     <div>
-      <div class="side-box"><h3>대상</h3><p data-edit="ai_side1">초·중등학생, 성인학습자, 시니어(디지털 튜터 과정)</p></div>
-      <div class="side-box"><h3>주요 진행 사례</h3><p data-edit="ai_side2">부산진구청·사하구청·모라 평생학습관 기후변화지도사 과정, 응봉초등학교 VR·코딩교육, 부산과학기술대학교 생성형AI·쇼츠제작 과정</p></div>
-      <div class="tag-row"><span class="tag">코딩</span><span class="tag">메이커교육</span><span class="tag">기후변화</span><span class="tag">생성형AI</span></div>
+      <div class="sideboxes" id="sideboxes-ai"></div>
+      <div class="tag-row" id="tags-ai"></div>
     </div>
   </div></section>
 
@@ -870,16 +875,16 @@
     <div class="detail-body" style="padding-top:0;">
       <span class="eyebrow" style="color:var(--teal);">CASE</span>
       <h2 style="font-size:clamp(26px,3.2vw,36px); font-weight:800; letter-spacing:-0.02em; margin-bottom:10px;">대표 사례</h2>
-      <div class="case-grid">
-        <div class="case-card">
-          <h3 data-edit="ai_case1_title">사례 제목을 입력해주세요</h3>
-          <p data-edit="ai_case1_desc">실제 진행하신 강의나 컨설팅 사례를 짧은 스토리로 남겨주세요. (배경, 진행 방식, 성과 등)</p>
-        </div>
-        <div class="case-card">
-          <h3 data-edit="ai_case2_title">사례 제목을 입력해주세요</h3>
-          <p data-edit="ai_case2_desc">실제 진행하신 강의나 컨설팅 사례를 짧은 스토리로 남겨주세요. (배경, 진행 방식, 성과 등)</p>
-        </div>
-      </div>
+      <div class="case-grid" id="cases-ai"></div>
+    </div>
+  </section>
+  <section class="curriculum-section">
+    <div class="detail-body" style="padding-top:0;">
+      <span class="eyebrow" style="color:var(--teal);">CURRICULUM</span>
+      <h2 style="font-size:clamp(26px,3.2vw,36px); font-weight:800; letter-spacing:-0.02em; margin-bottom:10px;">커리큘럼 소개</h2>
+      <p style="color:#5C5F65; font-size:15.5px; margin-bottom:24px;">회차별로 진행되는 커리큘럼을 소개합니다.</p>
+      <div class="curriculum-list" id="curriculum-ai"></div>
+      <p id="curriculumEmpty-ai" style="display:none; text-align:center; color:#9A9CA1; font-size:14.5px; padding:20px 0;">커리큘럼 소개가 준비 중입니다.</p>
     </div>
   </section>
   <section class="process-section">
@@ -922,9 +927,8 @@
       <div class="item"><b>이미지메이킹·자활센터 연계</b><span>부산진구 자활센터 등과 연계한 이미지메이킹 및 취업역량 프로그램</span></div>
     </div>
     <div>
-      <div class="side-box"><h3>대상</h3><p data-edit="disability_side1">구직 중인 장애인(청소년·성인), 관련 기관 실무자</p></div>
-      <div class="side-box"><h3>주요 진행 사례</h3><p data-edit="disability_side2">한국장애인공단 부산·경남·울산/대구·대전/경북, 밀양·양산·나사함 장애인복지관, 한국장애인고용공단</p></div>
-      <div class="tag-row"><span class="tag">취업성공패키지</span><span class="tag">인식개선교육</span><span class="tag">취업특강</span></div>
+      <div class="sideboxes" id="sideboxes-disability"></div>
+      <div class="tag-row" id="tags-disability"></div>
     </div>
   </div></section>
 
@@ -932,16 +936,16 @@
     <div class="detail-body" style="padding-top:0;">
       <span class="eyebrow" style="color:var(--teal);">CASE</span>
       <h2 style="font-size:clamp(26px,3.2vw,36px); font-weight:800; letter-spacing:-0.02em; margin-bottom:10px;">대표 사례</h2>
-      <div class="case-grid">
-        <div class="case-card">
-          <h3 data-edit="disability_case1_title">사례 제목을 입력해주세요</h3>
-          <p data-edit="disability_case1_desc">실제 진행하신 강의나 컨설팅 사례를 짧은 스토리로 남겨주세요. (배경, 진행 방식, 성과 등)</p>
-        </div>
-        <div class="case-card">
-          <h3 data-edit="disability_case2_title">사례 제목을 입력해주세요</h3>
-          <p data-edit="disability_case2_desc">실제 진행하신 강의나 컨설팅 사례를 짧은 스토리로 남겨주세요. (배경, 진행 방식, 성과 등)</p>
-        </div>
-      </div>
+      <div class="case-grid" id="cases-disability"></div>
+    </div>
+  </section>
+  <section class="curriculum-section">
+    <div class="detail-body" style="padding-top:0;">
+      <span class="eyebrow" style="color:var(--teal);">CURRICULUM</span>
+      <h2 style="font-size:clamp(26px,3.2vw,36px); font-weight:800; letter-spacing:-0.02em; margin-bottom:10px;">커리큘럼 소개</h2>
+      <p style="color:#5C5F65; font-size:15.5px; margin-bottom:24px;">회차별로 진행되는 커리큘럼을 소개합니다.</p>
+      <div class="curriculum-list" id="curriculum-disability"></div>
+      <p id="curriculumEmpty-disability" style="display:none; text-align:center; color:#9A9CA1; font-size:14.5px; padding:20px 0;">커리큘럼 소개가 준비 중입니다.</p>
     </div>
   </section>
   <section class="process-section">
@@ -984,9 +988,8 @@
       <div class="item"><b>지자체·공공기관 컨설팅</b><span>귀농귀촌 경영컨설팅, 창업교육 위탁운영, 지역기업 정책지원 수요조사</span></div>
     </div>
     <div>
-      <div class="side-box"><h3>대상</h3><p data-edit="consulting_side1">대학교, 지방자치단체, 공공기관, 지역기업</p></div>
-      <div class="side-box"><h3>주요 진행 사례</h3><p data-edit="consulting_side2">울산테크노파크 R&D 지원사업, 울산도시공사 도시재생활동가 교육, 신정평화시장 청년몰 확장사업, 대학연합 항노화아카데미(5년 연속)</p></div>
-      <div class="tag-row"><span class="tag">취창업프로그램</span><span class="tag">도시재생</span><span class="tag">정책컨설팅</span></div>
+      <div class="sideboxes" id="sideboxes-consulting"></div>
+      <div class="tag-row" id="tags-consulting"></div>
     </div>
   </div></section>
 
@@ -994,16 +997,16 @@
     <div class="detail-body" style="padding-top:0;">
       <span class="eyebrow" style="color:var(--teal);">CASE</span>
       <h2 style="font-size:clamp(26px,3.2vw,36px); font-weight:800; letter-spacing:-0.02em; margin-bottom:10px;">대표 사례</h2>
-      <div class="case-grid">
-        <div class="case-card">
-          <h3 data-edit="consulting_case1_title">사례 제목을 입력해주세요</h3>
-          <p data-edit="consulting_case1_desc">실제 진행하신 강의나 컨설팅 사례를 짧은 스토리로 남겨주세요. (배경, 진행 방식, 성과 등)</p>
-        </div>
-        <div class="case-card">
-          <h3 data-edit="consulting_case2_title">사례 제목을 입력해주세요</h3>
-          <p data-edit="consulting_case2_desc">실제 진행하신 강의나 컨설팅 사례를 짧은 스토리로 남겨주세요. (배경, 진행 방식, 성과 등)</p>
-        </div>
-      </div>
+      <div class="case-grid" id="cases-consulting"></div>
+    </div>
+  </section>
+  <section class="curriculum-section">
+    <div class="detail-body" style="padding-top:0;">
+      <span class="eyebrow" style="color:var(--teal);">CURRICULUM</span>
+      <h2 style="font-size:clamp(26px,3.2vw,36px); font-weight:800; letter-spacing:-0.02em; margin-bottom:10px;">커리큘럼 소개</h2>
+      <p style="color:#5C5F65; font-size:15.5px; margin-bottom:24px;">회차별로 진행되는 커리큘럼을 소개합니다.</p>
+      <div class="curriculum-list" id="curriculum-consulting"></div>
+      <p id="curriculumEmpty-consulting" style="display:none; text-align:center; color:#9A9CA1; font-size:14.5px; padding:20px 0;">커리큘럼 소개가 준비 중입니다.</p>
     </div>
   </section>
   <section class="process-section">
@@ -1074,6 +1077,18 @@
     <details class="admin-toplevel"><summary>강사진 관리</summary><div class="admin-accordion-body">
     <div id="adminTeamSection" class="admin-section"></div>
     </div></details>
+    <details class="admin-toplevel"><summary>상세페이지 - 청소년 진로·취업 콘텐츠</summary><div class="admin-accordion-body">
+    <div id="adminDetailYouthSection" class="admin-section"></div>
+    </div></details>
+    <details class="admin-toplevel"><summary>상세페이지 - AI·과학교구 콘텐츠</summary><div class="admin-accordion-body">
+    <div id="adminDetailAiSection" class="admin-section"></div>
+    </div></details>
+    <details class="admin-toplevel"><summary>상세페이지 - 장애인 취업코칭 콘텐츠</summary><div class="admin-accordion-body">
+    <div id="adminDetailDisabilitySection" class="admin-section"></div>
+    </div></details>
+    <details class="admin-toplevel"><summary>상세페이지 - 대학·기관 컨설팅 콘텐츠</summary><div class="admin-accordion-body">
+    <div id="adminDetailConsultingSection" class="admin-section"></div>
+    </div></details>
     <details class="admin-toplevel"><summary>텍스트 문구</summary><div class="admin-accordion-body">
     <div id="adminTextSection" class="admin-section"></div>
     </div></details>
@@ -1114,7 +1129,7 @@
   } catch(e){
     console.error('Supabase 클라이언트 생성 실패', e);
   }
-  let REMOTE = { texts:{}, images:{}, partners:[], docs:{}, testimonials:[], faqs:[], galleries:{}, settings:{}, team:[] };
+  let REMOTE = { texts:{}, images:{}, partners:[], docs:{}, testimonials:[], faqs:[], galleries:{}, settings:{}, team:[], detaillists:{}, teaserphotos:{} };
   let remoteReady = false;
 
   async function uploadToStorage(path, fileOrBlob){
@@ -1318,10 +1333,19 @@
     boardTouchStartX = null;
     boardTouchAxis = null;
   }, { passive: true });
+  function getTeaserPhotosFor(axis){
+    const selected = (REMOTE.teaserphotos && REMOTE.teaserphotos[axis]) || [];
+    const full = getGalleryFor(axis);
+    if(selected.length){
+      const filtered = selected.filter(function(url){ return full.indexOf(url) !== -1; });
+      if(filtered.length) return filtered;
+    }
+    return full;
+  }
   function renderTeaser(axis){
     const wrap = document.getElementById('teaser-' + axis);
     if(!wrap) return;
-    const imgs = getGalleryFor(axis);
+    const imgs = getTeaserPhotosFor(axis);
     if(!imgs.length){ wrap.style.display = 'none'; return; }
     wrap.style.display = '';
     const track = wrap.querySelector('.mq-track');
@@ -1391,6 +1415,88 @@
     '복지시설': ['한솔학교','동암학교','마하골 길벗 작은도서관','오작교작은도서관','감고개공원작은도서관','구평예들작은도서관','장림지꿈꾸는아이자람터','한마음다문화지역아동센터','초록우산어린이재단','신평지역아동센터','참조은다문화','울산북구다문화센터','백양복지관','다사랑복지관','부산구평복지관','부산사하 드림스타트']
   };
 
+  // ===== 상세페이지 태그/안내박스/대표사례/커리큘럼 회차 (사업축별) =====
+  const CASE_PLACEHOLDER = { title: '사례 제목을 입력해주세요', desc: '실제 진행하신 강의나 컨설팅 사례를 짧은 스토리로 남겨주세요. (배경, 진행 방식, 성과 등)', photo: '' };
+  const DETAIL_LISTS_DEFAULT = {
+    youth: {
+      tags: ['진로체험','자기소개서','모의면접','창업캠프'],
+      sideboxes: [
+        { title: '대상', content: '중·고등학교, 특성화고, 대학교 재학생 및 진로 전환기 학생' },
+        { title: '주요 진행 사례', content: '경남공업고등학교, 배정미래고등학교, 창원공업고등학교, 울산 학성여고, 명지중·남천초·좌천초 등' }
+      ],
+      cases: [Object.assign({}, CASE_PLACEHOLDER), Object.assign({}, CASE_PLACEHOLDER)],
+      curriculum: []
+    },
+    ai: {
+      tags: ['코딩','메이커교육','기후변화','생성형AI'],
+      sideboxes: [
+        { title: '대상', content: '초·중등학생, 성인학습자, 시니어(디지털 튜터 과정)' },
+        { title: '주요 진행 사례', content: '부산진구청·사하구청·모라 평생학습관 기후변화지도사 과정, 응봉초등학교 VR·코딩교육, 부산과학기술대학교 생성형AI·쇼츠제작 과정' }
+      ],
+      cases: [Object.assign({}, CASE_PLACEHOLDER), Object.assign({}, CASE_PLACEHOLDER)],
+      curriculum: []
+    },
+    disability: {
+      tags: ['취업성공패키지','인식개선교육','취업특강'],
+      sideboxes: [
+        { title: '대상', content: '구직 중인 장애인(청소년·성인), 관련 기관 실무자' },
+        { title: '주요 진행 사례', content: '한국장애인공단 부산·경남·울산/대구·대전/경북, 밀양·양산·나사함 장애인복지관, 한국장애인고용공단' }
+      ],
+      cases: [Object.assign({}, CASE_PLACEHOLDER), Object.assign({}, CASE_PLACEHOLDER)],
+      curriculum: []
+    },
+    consulting: {
+      tags: ['취창업프로그램','도시재생','정책컨설팅'],
+      sideboxes: [
+        { title: '대상', content: '대학교, 지방자치단체, 공공기관, 지역기업' },
+        { title: '주요 진행 사례', content: '울산테크노파크 R&D 지원사업, 울산도시공사 도시재생활동가 교육, 신정평화시장 청년몰 확장사업, 대학연합 항노화아카데미(5년 연속)' }
+      ],
+      cases: [Object.assign({}, CASE_PLACEHOLDER), Object.assign({}, CASE_PLACEHOLDER)],
+      curriculum: []
+    }
+  };
+  const DETAIL_AXIS_LABELS = { youth: '청소년 진로·취업교육', ai: 'AI·과학교구 교육', disability: '장애인 취업코칭', consulting: '대학·기관 컨설팅' };
+  function loadDetailLists(){
+    return (REMOTE.detaillists && Object.keys(REMOTE.detaillists).length) ? REMOTE.detaillists : {};
+  }
+  function getAxisLists(axis){
+    const remote = loadDetailLists();
+    return remote[axis] || DETAIL_LISTS_DEFAULT[axis];
+  }
+  function renderDetailExtras(axis){
+    const data = getAxisLists(axis);
+    const tagsEl = document.getElementById('tags-' + axis);
+    if(tagsEl) tagsEl.innerHTML = (data.tags || []).map(function(t){ return '<span class="tag">' + escapeHtml(t) + '</span>'; }).join('');
+    const sbEl = document.getElementById('sideboxes-' + axis);
+    if(sbEl) sbEl.innerHTML = (data.sideboxes || []).map(function(sb){
+      return '<div class="side-box"><h3>' + escapeHtml(sb.title) + '</h3><p>' + escapeHtml(sb.content) + '</p></div>';
+    }).join('');
+    const caseEl = document.getElementById('cases-' + axis);
+    if(caseEl) caseEl.innerHTML = (data.cases || []).map(function(c){
+      let html = '<div class="case-card">';
+      if(c.photo) html += '<img src="' + c.photo + '" class="case-photo" alt="사례 사진">';
+      html += '<h3>' + escapeHtml(c.title) + '</h3><p>' + escapeHtml(c.desc) + '</p></div>';
+      return html;
+    }).join('');
+    const curEl = document.getElementById('curriculum-' + axis);
+    const curEmptyMsg = document.getElementById('curriculumEmpty-' + axis);
+    const curList = data.curriculum || [];
+    if(curEl){
+      if(!curList.length){
+        curEl.innerHTML = '';
+        if(curEmptyMsg) curEmptyMsg.style.display = 'block';
+      } else {
+        if(curEmptyMsg) curEmptyMsg.style.display = 'none';
+        curEl.innerHTML = curList.map(function(r, i){
+          return '<div class="curr-card"><span class="curr-num">' + (i + 1) + '회차</span><h4>' + escapeHtml(r.title) + '</h4><p>' + escapeHtml(r.content) + '</p></div>';
+        }).join('');
+      }
+    }
+  }
+  function renderAllDetailExtras(){
+    GALLERY_AXES.forEach(function(axis){ renderDetailExtras(axis); });
+  }
+
   const FIELD_LABELS = {
   "hero_title": "메인 큰 제목 (헤드라인)",
   "hero_subtitle": "메인 소개 문장",
@@ -1428,20 +1534,12 @@
   "block_consulting_desc": "메인 카드 - 대학·기관 컨설팅 설명",
   "youth_hero_title": "상세페이지(청소년) - 큰 제목",
   "youth_hero_desc": "상세페이지(청소년) - 소개문구",
-  "youth_side1": "상세페이지(청소년) - 대상 안내",
-  "youth_side2": "상세페이지(청소년) - 주요 진행 사례",
   "ai_hero_title": "상세페이지(AI·과학교구) - 큰 제목",
   "ai_hero_desc": "상세페이지(AI·과학교구) - 소개문구",
-  "ai_side1": "상세페이지(AI·과학교구) - 대상 안내",
-  "ai_side2": "상세페이지(AI·과학교구) - 주요 진행 사례",
   "disability_hero_title": "상세페이지(장애인 취업코칭) - 큰 제목",
   "disability_hero_desc": "상세페이지(장애인 취업코칭) - 소개문구",
-  "disability_side1": "상세페이지(장애인 취업코칭) - 대상 안내",
-  "disability_side2": "상세페이지(장애인 취업코칭) - 주요 진행 사례",
   "consulting_hero_title": "상세페이지(대학·기관 컨설팅) - 큰 제목",
   "consulting_hero_desc": "상세페이지(대학·기관 컨설팅) - 소개문구",
-  "consulting_side1": "상세페이지(대학·기관 컨설팅) - 대상 안내",
-  "consulting_side2": "상세페이지(대학·기관 컨설팅) - 주요 진행 사례",
   "footer_phone": "푸터 - 김근안 대표 전화번호",
   "footer_email": "푸터 - 김근안 대표 이메일",
   "footer_phone2": "푸터 - 허대균 팀장 전화번호",
@@ -1473,22 +1571,6 @@
   "ai_context": "상세(AI·과학교구) - 배경 설명 문단",
   "disability_context": "상세(장애인 취업코칭) - 배경 설명 문단",
   "consulting_context": "상세(대학·기관 컨설팅) - 배경 설명 문단",
-  "youth_case1_title": "상세(청소년) - 대표 사례1 제목",
-  "youth_case1_desc": "상세(청소년) - 대표 사례1 설명",
-  "youth_case2_title": "상세(청소년) - 대표 사례2 제목",
-  "youth_case2_desc": "상세(청소년) - 대표 사례2 설명",
-  "ai_case1_title": "상세(AI·과학교구) - 대표 사례1 제목",
-  "ai_case1_desc": "상세(AI·과학교구) - 대표 사례1 설명",
-  "ai_case2_title": "상세(AI·과학교구) - 대표 사례2 제목",
-  "ai_case2_desc": "상세(AI·과학교구) - 대표 사례2 설명",
-  "disability_case1_title": "상세(장애인 취업코칭) - 대표 사례1 제목",
-  "disability_case1_desc": "상세(장애인 취업코칭) - 대표 사례1 설명",
-  "disability_case2_title": "상세(장애인 취업코칭) - 대표 사례2 제목",
-  "disability_case2_desc": "상세(장애인 취업코칭) - 대표 사례2 설명",
-  "consulting_case1_title": "상세(대학·기관 컨설팅) - 대표 사례1 제목",
-  "consulting_case1_desc": "상세(대학·기관 컨설팅) - 대표 사례1 설명",
-  "consulting_case2_title": "상세(대학·기관 컨설팅) - 대표 사례2 제목",
-  "consulting_case2_desc": "상세(대학·기관 컨설팅) - 대표 사례2 설명"
 };
 
   function loadTextOverrides(){ return REMOTE.texts || {}; }
@@ -1604,6 +1686,9 @@
     const card = document.getElementById('personCard3');
     if(card) card.style.display = visible ? '' : 'none';
   }
+  function isTeamMarqueeVisible(){
+    return REMOTE.settings && REMOTE.settings.teamMarqueeVisible === false ? false : true;
+  }
 
   // ===== 강사진 =====
   function loadTeam(){
@@ -1680,6 +1765,7 @@
     const wrap = document.getElementById('teamTeaser');
     const track = document.getElementById('teamTrack');
     if(!wrap || !track) return;
+    if(!isTeamMarqueeVisible()){ wrap.style.display = 'none'; return; }
     const featured = loadTeam().filter(function(t){ return t.featured; });
     if(!featured.length){ wrap.style.display = 'none'; return; }
     wrap.style.display = '';
@@ -1801,6 +1887,7 @@
   renderFAQ();
     renderTeamPage();
     renderTeamMarquee();
+    renderAllDetailExtras();
   renderDocs();
 
   async function initRemote(){
@@ -1817,7 +1904,9 @@
           faqs: data.faqs || [],
           galleries: data.galleries || {},
           settings: data.settings || {},
-          team: data.team || []
+          team: data.team || [],
+          detaillists: data.detaillists || {},
+          teaserphotos: data.teaserphotos || {}
         };
       }
     } catch(e){
@@ -1833,6 +1922,7 @@
     renderFAQ();
     renderTeamPage();
     renderTeamMarquee();
+    renderAllDetailExtras();
     renderDocs();
     renderAllGalleries();
   }
@@ -1868,7 +1958,7 @@
   function updateTopFab(){
     const fab = document.getElementById('topFab');
     if(!fab) return;
-    const onDetail = ['youth','ai','disability','consulting'].includes(activeRoute());
+    const onDetail = ['youth','ai','disability','consulting','team'].includes(activeRoute());
     fab.classList.toggle('show', onDetail && window.scrollY > 200);
   }
   window.addEventListener('scroll', updateTopFab, {passive:true});
@@ -1884,6 +1974,8 @@
   let adminTestimonialsState = [];
   let adminSettingsState = {};
   let adminTeamState = [];
+  let adminDetailListsState = {};
+  let adminTeaserPhotosState = {};
   let adminFaqState = [];
   let rteSavedRange = null;
   let rteSavedKey = null;
@@ -1926,9 +2018,23 @@
 
     adminDocsState = Object.assign({}, loadDocOverrides());
     adminTestimonialsState = loadTestimonials().map(function(t){ return Object.assign({}, t); });
-    adminSettingsState = { testimonialsVisible: isTestimonialsVisible(), member2Visible: isMember2Visible() };
+    adminSettingsState = { testimonialsVisible: isTestimonialsVisible(), member2Visible: isMember2Visible(), teamMarqueeVisible: isTeamMarqueeVisible() };
     adminFaqState = loadFaqs().map(function(f){ return Object.assign({}, f); });
     adminTeamState = loadTeam().map(function(t){ return Object.assign({}, t); });
+    adminDetailListsState = {};
+    GALLERY_AXES.forEach(function(axis){
+      const src = getAxisLists(axis);
+      adminDetailListsState[axis] = {
+        tags: (src.tags || []).slice(),
+        sideboxes: (src.sideboxes || []).map(function(sb){ return Object.assign({}, sb); }),
+        cases: (src.cases || []).map(function(c){ return Object.assign({}, c); }),
+        curriculum: (src.curriculum || []).map(function(r){ return Object.assign({}, r); })
+      };
+    });
+    adminTeaserPhotosState = {};
+    GALLERY_AXES.forEach(function(axis){
+      adminTeaserPhotosState[axis] = ((REMOTE.teaserphotos && REMOTE.teaserphotos[axis]) || []).slice();
+    });
 
     buildAdminImagesSection();
     buildAdminDocsSection();
@@ -1937,6 +2043,7 @@
     buildAdminTestimonialsSection();
     buildAdminFaqSection();
     buildAdminTeamSection();
+    GALLERY_AXES.forEach(function(axis){ buildAdminDetailSection(axis); });
     buildAdminPasswordSection();
   }
 
@@ -1945,7 +2052,9 @@
   function buildAdminImagesSection(){
     const container = document.getElementById('adminImagesSection');
     let html = '';
-    html += '<p style="color:#6E7075; font-size:13.5px; margin-bottom:18px;">로고와 프로필 사진은 새 파일을 올리면 바로 교체됩니다. 현장 사진은 추가하거나 삭제할 수 있고, 메인 화면 미리보기와 상세페이지 게시판에 함께 반영됩니다.</p>';
+    html += '<p style="color:#6E7075; font-size:13.5px; margin-bottom:18px;">로고와 프로필 사진은 새 파일을 올리면 바로 교체됩니다. 현장 사진은 추가하거나 삭제할 수 있고, 메인 화면 미리보기와 상세페이지 게시판에 함께 반영됩니다. 사진 옆 "대표사진" 체크박스를 켜면, 그 사진들만 메인페이지 슬라이드에 사용됩니다(하나도 안 고르면 전체 사진이 다 흐릅니다).</p>';
+
+    html += '<details class="admin-accordion-page"><summary>기본 이미지 (로고·프로필)</summary><div class="admin-accordion-body">';
     html += '<div class="admin-field"><label style="display:flex; align-items:center; gap:10px; cursor:pointer;">'
           + '<input type="checkbox" style="width:20px; height:20px;" ' + (adminSettingsState.member2Visible ? 'checked' : '') + ' onchange="adminSettingsState.member2Visible=this.checked">'
           + '기관소개에 소속원2 카드 표시하기 (사진·이름·소개를 입력하신 뒤 여기서 켜주세요)'
@@ -1955,13 +2064,20 @@
       html += '<div class="admin-gallery-item" style="width:140px;"><img src="' + adminImageState[key] + '" class="admin-img-preview" style="width:140px; height:140px;"></div>';
       html += '<input type="file" accept="image/*" class="admin-file-input" onchange="adminReplaceImage(\'' + key + '\', this.files)"></div>';
     });
+    html += '</div></details>';
+
     GALLERY_AXES.forEach(function(axis){
       const imgs = adminGalleryState[axis] || [];
-      html += '<div class="admin-gallery-group"><h4>' + AXIS_LABELS[axis] + ' 현장 사진 (' + imgs.length + '장)</h4><div class="admin-gallery-grid" id="admin-gallery-' + axis + '">';
+      const featured = adminTeaserPhotosState[axis] || [];
+      html += '<details class="admin-accordion-page"><summary>' + AXIS_LABELS[axis] + ' 현장 사진 (' + imgs.length + '장)</summary><div class="admin-accordion-body">';
+      html += '<div class="admin-gallery-grid" id="admin-gallery-' + axis + '">';
       imgs.forEach(function(src, i){
-        html += '<div class="admin-gallery-item"><img src="' + src + '" class="admin-img-preview"><button type="button" class="admin-btn danger small" onclick="adminDeletePhoto(\'' + axis + '\',' + i + ')">삭제</button></div>';
+        const isFeatured = featured.indexOf(src) !== -1;
+        html += '<div class="admin-gallery-item"><img src="' + src + '" class="admin-img-preview">'
+              + '<label style="display:flex; align-items:center; gap:5px; font-size:12px; margin-top:4px;"><input type="checkbox" ' + (isFeatured ? 'checked' : '') + ' onchange="adminToggleTeaserPhoto(\'' + axis + '\', ' + i + ')"> 대표사진</label>'
+              + '<button type="button" class="admin-btn danger small" onclick="adminDeletePhoto(\'' + axis + '\',' + i + ')">삭제</button></div>';
       });
-      html += '</div><input type="file" accept="image/*" multiple class="admin-file-input" onchange="adminAddPhotos(\'' + axis + '\', this.files)"></div>';
+      html += '</div><input type="file" accept="image/*" multiple class="admin-file-input" onchange="adminAddPhotos(\'' + axis + '\', this.files)"></div></details>';
     });
     container.innerHTML = html;
   }
@@ -2005,8 +2121,20 @@
     }
   }
   function adminDeletePhoto(axis, i){
+    const url = adminGalleryState[axis][i];
     adminGalleryState[axis].splice(i, 1);
+    if(adminTeaserPhotosState[axis]){
+      const idx = adminTeaserPhotosState[axis].indexOf(url);
+      if(idx !== -1) adminTeaserPhotosState[axis].splice(idx, 1);
+    }
     buildAdminImagesSection();
+  }
+  function adminToggleTeaserPhoto(axis, i){
+    const url = adminGalleryState[axis][i];
+    if(!adminTeaserPhotosState[axis]) adminTeaserPhotosState[axis] = [];
+    const idx = adminTeaserPhotosState[axis].indexOf(url);
+    if(idx === -1) adminTeaserPhotosState[axis].push(url);
+    else adminTeaserPhotosState[axis].splice(idx, 1);
   }
   async function adminAddPhotos(axis, files){
     const list = Array.from(files);
@@ -2042,27 +2170,19 @@
     },
     '상세페이지 - 청소년 진로·취업': {
       '큰 제목·소개문구': ['youth_hero_title','youth_hero_desc'],
-      '배경 설명': ['youth_context'],
-      '안내 정보(대상·진행 사례)': ['youth_side1','youth_side2'],
-      '대표 사례 2개': ['youth_case1_title','youth_case1_desc','youth_case2_title','youth_case2_desc']
+      '배경 설명': ['youth_context']
     },
     '상세페이지 - AI·과학교구': {
       '큰 제목·소개문구': ['ai_hero_title','ai_hero_desc'],
-      '배경 설명': ['ai_context'],
-      '안내 정보(대상·진행 사례)': ['ai_side1','ai_side2'],
-      '대표 사례 2개': ['ai_case1_title','ai_case1_desc','ai_case2_title','ai_case2_desc']
+      '배경 설명': ['ai_context']
     },
     '상세페이지 - 장애인 취업코칭': {
       '큰 제목·소개문구': ['disability_hero_title','disability_hero_desc'],
-      '배경 설명': ['disability_context'],
-      '안내 정보(대상·진행 사례)': ['disability_side1','disability_side2'],
-      '대표 사례 2개': ['disability_case1_title','disability_case1_desc','disability_case2_title','disability_case2_desc']
+      '배경 설명': ['disability_context']
     },
     '상세페이지 - 대학·기관 컨설팅': {
       '큰 제목·소개문구': ['consulting_hero_title','consulting_hero_desc'],
-      '배경 설명': ['consulting_context'],
-      '안내 정보(대상·진행 사례)': ['consulting_side1','consulting_side2'],
-      '대표 사례 2개': ['consulting_case1_title','consulting_case1_desc','consulting_case2_title','consulting_case2_desc']
+      '배경 설명': ['consulting_context']
     }
   };
 
@@ -2311,6 +2431,10 @@
   function buildAdminTeamSection(){
     const container = document.getElementById('adminTeamSection');
     let html = '';
+    html += '<div class="admin-field"><label style="display:flex; align-items:center; gap:10px; cursor:pointer;">'
+          + '<input type="checkbox" style="width:20px; height:20px;" ' + (adminSettingsState.teamMarqueeVisible !== false ? 'checked' : '') + ' onchange="adminSettingsState.teamMarqueeVisible=this.checked">'
+          + '메인페이지에 강사진 미리보기 섹션 표시하기 (체크 해제하면 대표강사가 있어도 메인에서 숨겨집니다)'
+          + '</label></div>';
     html += '<p style="color:#6E7075; font-size:13.5px; margin-bottom:18px;">강사를 추가·수정·삭제할 수 있어요. "대표강사로 메인 노출"을 체크한 강사만 메인페이지에 흐르는 형태로 보여지고, 전체 명단은 항상 "강사진" 페이지에서 볼 수 있어요.</p>';
     adminTeamState.forEach(function(t, i){
       html += '<div class="admin-field" style="border:1px solid var(--hairline); border-radius:12px; padding:18px;">';
@@ -2354,6 +2478,93 @@
     }
   }
 
+  const DETAIL_SECTION_ID = { youth: 'adminDetailYouthSection', ai: 'adminDetailAiSection', disability: 'adminDetailDisabilitySection', consulting: 'adminDetailConsultingSection' };
+  function buildAdminDetailSection(axis){
+    const container = document.getElementById(DETAIL_SECTION_ID[axis]);
+    if(!container) return;
+    const data = adminDetailListsState[axis];
+    let html = '';
+
+    html += '<h4 style="margin-bottom:10px;">태그(키워드칩)</h4>';
+    data.tags.forEach(function(tag, i){
+      html += '<div class="admin-style-row" style="margin-bottom:8px;">';
+      html += '<input type="text" value="' + escapeHtml(tag) + '" oninput="adminDetailListsState[\'' + axis + '\'].tags[' + i + ']=this.value" style="flex:1; padding:10px; border:1.5px solid var(--hairline); border-radius:8px; font-size:14px;">';
+      html += '<button type="button" class="admin-btn danger small" onclick="adminDetailRemove(\'' + axis + '\',\'tags\',' + i + ')">삭제</button>';
+      html += '</div>';
+    });
+    html += '<button type="button" class="admin-btn primary small" onclick="adminDetailAddTag(\'' + axis + '\')">+ 태그 추가</button>';
+
+    html += '<h4 style="margin:22px 0 10px;">안내박스(대상·진행사례 등)</h4>';
+    data.sideboxes.forEach(function(sb, i){
+      html += '<div class="admin-field" style="border:1px solid var(--hairline); border-radius:10px; padding:14px;">';
+      html += '<input type="text" placeholder="박스 제목 (예: 대상)" value="' + escapeHtml(sb.title || '') + '" oninput="adminDetailListsState[\'' + axis + '\'].sideboxes[' + i + '].title=this.value" style="width:100%; padding:10px; border:1.5px solid var(--hairline); border-radius:8px; font-size:14px; margin-bottom:8px;">';
+      html += '<textarea placeholder="내용" oninput="adminDetailListsState[\'' + axis + '\'].sideboxes[' + i + '].content=this.value" style="min-height:70px;">' + escapeHtml(sb.content || '') + '</textarea>';
+      html += '<div style="margin-top:8px;"><button type="button" class="admin-btn danger small" onclick="adminDetailRemove(\'' + axis + '\',\'sideboxes\',' + i + ')">이 안내박스 삭제</button></div>';
+      html += '</div>';
+    });
+    html += '<button type="button" class="admin-btn primary small" onclick="adminDetailAddSidebox(\'' + axis + '\')">+ 안내박스 추가</button>';
+
+    html += '<h4 style="margin:22px 0 10px;">대표 사례</h4>';
+    data.cases.forEach(function(c, i){
+      html += '<div class="admin-field" style="border:1px solid var(--hairline); border-radius:10px; padding:14px;">';
+      html += '<div style="display:flex; gap:14px; flex-wrap:wrap; align-items:flex-start; margin-bottom:10px;">';
+      html += '<div><img src="' + (c.photo || '') + '" class="admin-img-preview" style="width:100px; height:80px; ' + (c.photo ? '' : 'background:var(--surface-soft);') + '"><input type="file" accept="image/*" class="admin-file-input" style="margin-top:6px; width:100px;" onchange="adminUploadCasePhoto(\'' + axis + '\',' + i + ', this.files)"><div style="font-size:11.5px; color:#9A9CA1; margin-top:4px;">사진 선택사항</div></div>';
+      html += '<div style="flex:1; min-width:200px;"><input type="text" placeholder="사례 제목" value="' + escapeHtml(c.title || '') + '" oninput="adminDetailListsState[\'' + axis + '\'].cases[' + i + '].title=this.value" style="width:100%; padding:10px; border:1.5px solid var(--hairline); border-radius:8px; font-size:14px;"></div>';
+      html += '</div>';
+      html += '<textarea placeholder="사례 내용" oninput="adminDetailListsState[\'' + axis + '\'].cases[' + i + '].desc=this.value">' + escapeHtml(c.desc || '') + '</textarea>';
+      html += '<div style="margin-top:8px;"><button type="button" class="admin-btn danger small" onclick="adminDetailRemove(\'' + axis + '\',\'cases\',' + i + ')">이 사례 삭제</button></div>';
+      html += '</div>';
+    });
+    html += '<button type="button" class="admin-btn primary small" onclick="adminDetailAddCase(\'' + axis + '\')">+ 사례 추가</button>';
+
+    html += '<h4 style="margin:22px 0 10px;">커리큘럼 회차</h4>';
+    data.curriculum.forEach(function(r, i){
+      html += '<div class="admin-field" style="border:1px solid var(--hairline); border-radius:10px; padding:14px;">';
+      html += '<label>' + (i + 1) + '회차</label>';
+      html += '<input type="text" placeholder="회차 제목" value="' + escapeHtml(r.title || '') + '" oninput="adminDetailListsState[\'' + axis + '\'].curriculum[' + i + '].title=this.value" style="width:100%; padding:10px; border:1.5px solid var(--hairline); border-radius:8px; font-size:14px; margin-bottom:8px;">';
+      html += '<textarea placeholder="회차 내용" oninput="adminDetailListsState[\'' + axis + '\'].curriculum[' + i + '].content=this.value">' + escapeHtml(r.content || '') + '</textarea>';
+      html += '<div style="margin-top:8px;"><button type="button" class="admin-btn danger small" onclick="adminDetailRemove(\'' + axis + '\',\'curriculum\',' + i + ')">이 회차 삭제</button></div>';
+      html += '</div>';
+    });
+    html += '<button type="button" class="admin-btn primary small" onclick="adminDetailAddCurriculum(\'' + axis + '\')">+ 회차 추가</button>';
+
+    container.innerHTML = html;
+  }
+  function adminDetailRemove(axis, key, i){
+    if(!confirm('삭제할까요?')) return;
+    adminDetailListsState[axis][key].splice(i, 1);
+    buildAdminDetailSection(axis);
+  }
+  function adminDetailAddTag(axis){
+    adminDetailListsState[axis].tags.push('');
+    buildAdminDetailSection(axis);
+  }
+  function adminDetailAddSidebox(axis){
+    adminDetailListsState[axis].sideboxes.push({ title: '', content: '' });
+    buildAdminDetailSection(axis);
+  }
+  function adminDetailAddCase(axis){
+    adminDetailListsState[axis].cases.push({ title: '', desc: '', photo: '' });
+    buildAdminDetailSection(axis);
+  }
+  function adminDetailAddCurriculum(axis){
+    adminDetailListsState[axis].curriculum.push({ title: '', content: '' });
+    buildAdminDetailSection(axis);
+  }
+  async function adminUploadCasePhoto(axis, i, files){
+    if(!files || !files.length) return;
+    try {
+      const blob = await compressImageFile(files[0], 900, 0.8);
+      if(!blob) return;
+      const path = 'cases/' + axis + '/' + Date.now() + '-' + i + '.jpg';
+      const url = await uploadToStorage(path, blob);
+      adminDetailListsState[axis].cases[i].photo = url;
+      buildAdminDetailSection(axis);
+    } catch(e){
+      alert('사진 업로드 중 오류가 발생했습니다: ' + e.message);
+    }
+  }
+
   async function adminSave(){
     if(!sb){
       alert('서버 연결이 되어 있지 않아 저장할 수 없습니다. 인터넷 연결을 확인하고 페이지를 새로고침한 뒤 다시 시도해주세요.');
@@ -2369,7 +2580,9 @@
       faqs: adminFaqState,
       galleries: adminGalleryState,
       settings: adminSettingsState,
-      team: adminTeamState
+      team: adminTeamState,
+      detaillists: adminDetailListsState,
+      teaserphotos: adminTeaserPhotosState
     };
 
     const saveBtn = document.querySelector('.admin-actions .admin-btn.primary');
@@ -2396,6 +2609,7 @@
     renderFAQ();
     renderTeamPage();
     renderTeamMarquee();
+    renderAllDetailExtras();
 
     const msg = document.getElementById('adminSavedMsg');
     msg.style.display = 'block';
@@ -2408,7 +2622,7 @@
       return;
     }
 
-    const payload = { texts:{}, images:{}, partners:{}, docs:{}, testimonials:[], faqs:[], galleries:{}, settings:{}, team:[] };
+    const payload = { texts:{}, images:{}, partners:{}, docs:{}, testimonials:[], faqs:[], galleries:{}, settings:{}, team:[], detaillists:{}, teaserphotos:{} };
     const { error } = await sb.from('site_content').update(payload).eq('id', 1);
     if(error){
       alert('초기화에 실패했습니다. 서버 연결을 확인해주세요.\n\n(오류 내용: ' + error.message + ')');
@@ -2425,8 +2639,20 @@
     adminDocsState = {};
     adminTestimonialsState = TESTIMONIALS_DEFAULT.map(function(t){ return Object.assign({}, t); });
     adminFaqState = FAQ_DEFAULT.map(function(f){ return Object.assign({}, f); });
-    adminSettingsState = { testimonialsVisible: true, member2Visible: false };
+    adminSettingsState = { testimonialsVisible: true, member2Visible: false, teamMarqueeVisible: true };
     adminTeamState = [];
+    adminDetailListsState = {};
+    GALLERY_AXES.forEach(function(axis){
+      const src = DETAIL_LISTS_DEFAULT[axis];
+      adminDetailListsState[axis] = {
+        tags: (src.tags || []).slice(),
+        sideboxes: (src.sideboxes || []).map(function(sb){ return Object.assign({}, sb); }),
+        cases: (src.cases || []).map(function(c){ return Object.assign({}, c); }),
+        curriculum: (src.curriculum || []).map(function(r){ return Object.assign({}, r); })
+      };
+    });
+    adminTeaserPhotosState = {};
+    GALLERY_AXES.forEach(function(axis){ adminTeaserPhotosState[axis] = []; });
 
     buildAdminImagesSection();
     buildAdminDocsSection();
@@ -2435,6 +2661,7 @@
     buildAdminTestimonialsSection();
     buildAdminFaqSection();
     buildAdminTeamSection();
+    GALLERY_AXES.forEach(function(axis){ buildAdminDetailSection(axis); });
 
     renderAllGalleries();
     applyImageOverrides();
@@ -2447,6 +2674,7 @@
     renderFAQ();
     renderTeamPage();
     renderTeamMarquee();
+    renderAllDetailExtras();
   }
 
 </script>
